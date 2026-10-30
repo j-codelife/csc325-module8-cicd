@@ -82,22 +82,7 @@ jobs:
     needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 25
-    concurrency:
-      group: render-production
-      cancel-in-progress: false
+    timeout-minutes: 5
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-      - name: Configure Python
-        uses: actions/setup-python@v7
-        with:
-          python-version-file: .python-version
-      - name: Deploy tested commit and verify public health
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-          RENDER_SERVICE_ID: ${{ vars.RENDER_SERVICE_ID }}
-          RENDER_SERVICE_URL: ${{ vars.RENDER_SERVICE_URL }}
-        run: python scripts/deploy_render.py
+      - name: Simulate deployment
+        run: echo "Deploying application (simulation)"

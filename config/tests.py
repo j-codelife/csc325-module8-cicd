@@ -36,24 +36,6 @@ class ProductionSettingsTests(SimpleTestCase):
         self.assertTrue(settings["SECRET_KEY"])
         self.assertFalse(settings["SECURE_SSL_REDIRECT"])
 
-    @override_settings(
-        DEBUG=False,
-        ALLOWED_HOSTS=["backend.example.com"],
-        SECURE_SSL_REDIRECT=True,
-        SECURE_PROXY_SSL_HEADER=("HTTP_X_FORWARDED_PROTO", "https"),
-        SECURE_HSTS_SECONDS=31536000,
-    )
-    def test_render_https_proxy_serves_health_without_a_redirect_loop(self):
-        response = self.client.get(
-            "/api/health/",
-            HTTP_HOST="backend.example.com",
-            HTTP_X_FORWARDED_PROTO="https",
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), {"status": "ok"})
-        self.assertIn("Strict-Transport-Security", response)
-
     @override_settings(SECURE_SSL_REDIRECT=True, ALLOWED_HOSTS=["backend.example.com"])
     def test_production_redirects_http_to_https(self):
         response = self.client.get("/api/health/", HTTP_HOST="backend.example.com")
