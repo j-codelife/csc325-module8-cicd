@@ -14,7 +14,7 @@ class HealthEndpointTests(SimpleTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response["Content-Type"], "application/json")
-        self.assertEqual(response.json(), {"status": "ok"})
+        self.assertEqual(response.json(), {"status": "ok", "version": "2.0"})
 
     def test_post_is_not_allowed(self):
         response = self.client.post(self.url, {}, format="json")
